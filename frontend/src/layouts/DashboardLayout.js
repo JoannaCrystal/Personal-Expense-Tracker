@@ -9,6 +9,7 @@ export default function DashboardLayout({ user }) {
     { label: 'User Account Details', path: '/dashboard/account' },
     { label: 'Add Account', path: '/dashboard/add-account' },
     { label: 'Add Category', path: '/dashboard/add-category' },
+    { label: 'Map Category', path: '/dashboard/map-category' },
     { label: 'Update Expenses', path: '/dashboard/update-expenses' },
     { label: 'Logout', path: '/logout' },
   ];
@@ -31,7 +32,7 @@ export default function DashboardLayout({ user }) {
           {/* User Info */}
           <div className="flex flex-col items-center mb-6">
             <img
-              src={user?.profilePic || 'https://via.placeholder.com/100'}
+              src={user?.profilePic || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'}
               alt="User"
               className="w-24 h-24 rounded-full"
             />
