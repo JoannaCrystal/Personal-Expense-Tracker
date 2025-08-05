@@ -1,17 +1,15 @@
-# backend/app/api/routes/accounts.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
-from app.db import crud
-from app.schemas.accounts import AccountCreate, AccountOut
 from app.db.session import get_db
+from app.db import crud
+from app.schemas.summary import CategorySummary, MonthlySummary
 from app.models.users import User
 
-# Use the same secret and algorithm as in your auth.py
+# Use the same SECRET_KEY and ALGORITHM as your auth.py
 SECRET_KEY = "your-very-secret-key"
 ALGORITHM = "HS256"
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
@@ -27,7 +25,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-
     user = crud.get_user_by_username(db, username)
     if user is None:
         raise credentials_exception
@@ -35,33 +32,20 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 router = APIRouter()
 
-@router.post("/", response_model=AccountOut, status_code=status.HTTP_201_CREATED)
-def create_account(
-    account: AccountCreate,
+@router.get("/categories", response_model=list[CategorySummary])
+def get_category_summary(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Create a new account for the authenticated user."""
-    return crud.create_account(db, account, current_user.id)
+    """Return total spend per category for the authenticated user."""
+    rows = crud.get_expense_summary_by_category(db, current_user.id)
+    return [CategorySummary(category=cat, total_amount=total) for cat, total in rows]
 
-@router.get("/", response_model=list[AccountOut])
-def list_accounts(
+@router.get("/monthly", response_model=list[MonthlySummary])
+def get_monthly_summary(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """List all accounts belonging to the authenticated user."""
-    return crud.get_accounts_by_user(db, current_user.id)
-
-@router.get("/{account_id}", response_model=AccountOut)
-def get_account(
-    account_id: int,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    """
-    Retrieve a single account by ID. Users can only view their own accounts.
-    """
-    account = crud.get_account_by_id(db, account_id)
-    if not account or account.user_id != current_user.id:
-        raise HTTPException(status_code=404, detail="Account not found")
-    return account
+    """Return total spend by month for the authenticated user."""
+    rows = crud.get_expense_summary_by_month(db, current_user.id)
+    return [MonthlySummary(month=month, total_amount=total) for month, total in rows]

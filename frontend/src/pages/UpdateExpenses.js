@@ -1,3 +1,5 @@
+// frontend/src/pages/UpdateExpenses.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -8,7 +10,7 @@ export default function UpdateExpenses() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Get JWT token from localStorage
+  // Retrieve JWT token from localStorage
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -25,26 +27,29 @@ export default function UpdateExpenses() {
         setError('Failed to load accounts');
       }
     }
-
     fetchAccounts();
   }, [token]);
 
+  // Add another file/account upload row
   const addExpenseForm = () => {
     setExpenseForms([...expenseForms, { accountId: '', file: null }]);
   };
 
+  // Handle account selection changes
   const handleAccountChange = (index, value) => {
     const updatedForms = [...expenseForms];
     updatedForms[index].accountId = value;
     setExpenseForms(updatedForms);
   };
 
+  // Handle file selection changes
   const handleFileChange = (index, file) => {
     const updatedForms = [...expenseForms];
     updatedForms[index].file = file;
     setExpenseForms(updatedForms);
   };
 
+  // Submit each form row to the backend
   const handleSubmit = async () => {
     setLoading(true);
     setError('');
@@ -59,16 +64,16 @@ export default function UpdateExpenses() {
         formData.append('account_id', form.accountId);
         formData.append('file', form.file);
 
-        await axios.post('/api/expenses/upload', formData, {
+        await axios.post('http://localhost:8000/api/expenses/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
           },
         });
       }
-
       setSuccessMessage('Expenses uploaded successfully.');
-      setExpenseForms([{ accountId: '', file: null }]); // Reset form
+      // Reset the form rows after successful upload
+      setExpenseForms([{ accountId: '', file: null }]);
     } catch (err) {
       setError(err.response?.data?.detail || err.message || 'Upload failed');
     } finally {

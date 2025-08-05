@@ -4,3 +4,4 @@ Base = declarative_base()
 from app.models import users
 from app.models import accounts
 from app.models import categories
+from app.models import expenses

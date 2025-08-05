@@ -6,7 +6,8 @@ import Register from './pages/Register';
 import DashboardLayout from './layouts/DashboardLayout';
 import AddAccount from './pages/AddAccount';
 import AddCategory from './pages/AddCategory';
-import UpdateExpenses from './pages/UpdateExpenses';  // Import UpdateExpenses page
+import UpdateExpenses from './pages/UpdateExpenses';
+import Summary from './pages/Summary';
 
 const DashboardHome = () => (
   <div className="text-lg px-4 py-6">Welcome to your dashboard!</div>
@@ -27,6 +28,7 @@ function App() {
           <Route path="add-account" element={<AddAccount />} />
           <Route path="add-category" element={<AddCategory />} />
           <Route path="update-expenses" element={<UpdateExpenses />} /> {/* Added route */}
+          <Route path="summary" element={<Summary />} />
           {/* Add other sidebar items here as needed */}
         </Route>
       </Routes>

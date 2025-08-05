@@ -17,7 +17,12 @@ export default function DashboardLayout({ user }) {
     <div className="flex flex-col h-screen">
       {/* Top Title Panel */}
       <header className="bg-blue-600 text-white text-xl font-bold px-6 py-4">
-        Expense Tracker
+        <div>Expense Tracker</div>
+        <Link
+          to="/dashboard/summary"
+          className="text-sm bg-white text-blue-600 font-semibold px-4 py-2 rounded shadow hover:bg-blue-100">
+          View Summary
+        </Link>
       </header>
 
       <div className="flex flex-1 overflow-hidden">

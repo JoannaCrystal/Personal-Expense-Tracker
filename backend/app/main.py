@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import auth, accounts, expenses, categories, users  # ensure user_routes is renamed to users if needed
+from app.api.routes import auth, accounts, expenses, categories, users, summary  # ensure user_routes is renamed to users if needed
 
 app = FastAPI()
 
@@ -25,3 +25,4 @@ app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(accounts.router, prefix="/api/accounts", tags=["accounts"])
 app.include_router(expenses.router, prefix="/api/expenses", tags=["expenses"])
 app.include_router(categories.router, prefix="/api/categories", tags=["categories"])
+app.include_router(summary.router, prefix="/api/summary", tags=["summary"])
