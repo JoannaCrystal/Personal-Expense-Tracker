@@ -1,30 +1,30 @@
-// src/App.js
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import LandingPage from './pages/LandingPage';
-import Login from './pages/Login';
-import Register from './pages/Register';
-
+import AuthPage from './pages/AuthPage';
 import DashboardLayout from './layouts/DashboardLayout';
-import DashboardHome from './pages/DashboardHome';
 import AddAccount from './pages/AddAccount';
 import AddCategory from './pages/AddCategory';
 import UpdateExpenses from './pages/UpdateExpenses';
 import Summary from './pages/Summary';
 import MapCategory from './pages/MapCategory';
+import DashboardHome from './pages/DashboardHome';
+import PublicLayout from './layouts/PublicLayout';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes with Dashboard Layout */}
+        {/* Public Routes with Shared Layout (Home Icon Panel) */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route path="/register" element={<AuthPage />} />
+        </Route>
+
+        {/* Protected Routes - Dashboard */}
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route path="home" element={<DashboardHome />} />
           <Route path="add-account" element={<AddAccount />} />

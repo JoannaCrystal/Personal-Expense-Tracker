@@ -1,83 +1,68 @@
-// src/pages/DashboardHome.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  FaHome,
-  FaUserPlus,
-  FaFolderPlus,
-  FaMapSigns,
-  FaEdit,
-  FaChartPie,
-} from 'react-icons/fa';
+import { FaChartPie } from 'react-icons/fa';
 
+/**
+ * DashboardHome renders the landing page within the dashboard section. It
+ * displays a grid of action cards that link to different parts of the
+ * application. The layout follows the neumorphic dark theme illustrated
+ * in the provided mock‑up: a deep purple background, soft shadows and
+ * rounded corners. When additional cards are added, the grid simply
+ * wraps to another row.
+ */
 export default function DashboardHome() {
+  // Define the cards to show on the dashboard. Each card can optionally
+  // specify a route via the `to` property. If no route is defined, the
+  // card will render as a static box (used for the welcome message).
   const cards = [
     {
-      title: 'Welcome!',
-      description: 'Manage your finances with ease.',
-      icon: <FaHome size={40} className="opacity-60" />,
-      path: null, // no click on welcome
-      color: 'bg-moody',
+      label: 'Welcome!',
+      subtext: 'Manage your finances with ease.',
+      to: null,
     },
     {
-      title: 'Summary',
-      description: null,
-      icon: <FaChartPie size={40} />,
-      path: '/dashboard/summary',
-      color: 'bg-moody-dark',
+      label: 'Summary',
+      to: '/dashboard/summary',
+      icon: <FaChartPie size={32} className="opacity-70 mb-3" />,
     },
     {
-      title: 'Add Account',
-      description: null,
-      icon: <FaUserPlus size={40} />,
-      path: '/dashboard/add-account',
-      color: 'bg-moody-dark',
+      label: 'Add Account',
+      to: '/dashboard/add-account',
     },
     {
-      title: 'Add Category',
-      description: null,
-      icon: <FaFolderPlus size={40} />,
-      path: '/dashboard/add-category',
-      color: 'bg-moody-dark',
+      label: 'Add Category',
+      to: '/dashboard/add-category',
     },
     {
-      title: 'Map Category',
-      description: null,
-      icon: <FaMapSigns size={40} />,
-      path: '/dashboard/map-category',
-      color: 'bg-moody-dark',
+      label: 'Map Category',
+      to: '/dashboard/map-category',
     },
     {
-      title: 'Update Expenses',
-      description: null,
-      icon: <FaEdit size={40} />,
-      path: '/dashboard/update-expenses',
-      color: 'bg-moody-dark',
+      label: 'Update Expenses',
+      to: '/dashboard/update-expenses',
     },
   ];
 
   return (
-    <div className="p-6 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((card) => (
-          <div
-            key={card.title}
-            className={`rounded-xl p-6 shadow-md ${card.color} flex flex-col items-start justify-between hover:bg-moody-light transition-all`}
-          >
-            <div className="mb-4">{card.icon}</div>
-            <h3 className="text-xl font-semibold mb-1">{card.title}</h3>
-            {card.description && <p className="text-sm opacity-70">{card.description}</p>}
-            {card.path && (
-              <Link
-                to={card.path}
-                className="mt-4 inline-block text-sm font-semibold text-moody underline"
-              >
-                Go to {card.title}
-              </Link>
-            )}
-          </div>
-        ))}
+    <div className="p-8 bg-moody-dark min-h-screen text-white">
+      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {cards.map((card, idx) => {
+          const content = (
+            <div className="p-6 rounded-xl bg-moody shadow-neumorph transition-colors hover:bg-moody-light h-full flex flex-col justify-center">
+              {card.icon}
+              <h2 className="text-2xl font-semibold mb-1">{card.label}</h2>
+              {card.subtext && (
+                <p className="text-sm text-gray-300 mt-1">{card.subtext}</p>
+              )}
+            </div>
+          );
+          return card.to ? (
+            <Link to={card.to} key={idx}>{content}</Link>
+          ) : (
+            <div key={idx}>{content}</div>
+          );
+        })}
       </div>
     </div>
   );

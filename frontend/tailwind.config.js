@@ -7,12 +7,18 @@ module.exports = {
     extend: {
       colors: {
         // Custom colour palette for the expense tracker
+        // Updated to deeper, more muted purples to better match the provided sample image.
         moody: {
-          DEFAULT: '#6B4C9A', // primary moody purple
-          light: '#8C6BB8',   // lighter version for hovers
-          dark: '#4C316C',    // darker shade for accents
+          DEFAULT: '#2a2154', // primary dark purple for cards and panels
+          light: '#42327d',   // lighter version for hovers
+          dark: '#15112c',    // darker shade for backgrounds
         },
-        smoky: '#ECECEC',       // soft smoky grey for backgrounds
+        smoky: '#ECECEC',       // soft smoky grey for backgrounds (unused in dark theme)
+      },
+      backgroundImage: {
+        // Gradient used for the page background. This creates a smooth blend
+        // between our dark, default and light moody colours.
+        'moody-gradient': 'linear-gradient(to bottom right, #15112c, #2a2154, #42327d)',
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],

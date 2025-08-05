@@ -1,79 +1,89 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import {
+  FaHome,
+  FaUserPlus,
+  FaFolderPlus,
+  FaMapSigns,
+  FaEdit,
+  FaChartPie,
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+  FaUserCircle,
+} from 'react-icons/fa';
 
+/**
+ * DashboardLayout is responsible for rendering the persistent shell around
+ * authenticated pages. It includes a collapsible sidebar and a top bar with a
+ * menu toggle and user icon. The sidebar lists navigation items with icons,
+ * mirroring the design shown in the provided mock-up image. Active routes
+ * are highlighted, and the sidebar collapses down to show only icons when
+ * toggled.
+ */
 export default function DashboardLayout({ user }) {
   const location = useLocation();
-
-  // State to control whether the sidebar is collapsed. When collapsed, the
-  // sidebar shrinks to show only icons or initials. A toggle button in
-  // the header controls this state.
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
+  /**
+   * Define navigation items for the sidebar. Each item includes a label,
+   * destination path, and an icon component. The order here will dictate
+   * the order they appear in the sidebar.
+   */
   const navItems = [
-    { label: 'Home Page', path: '/dashboard/home' },
-    { label: 'User Account Details', path: '/dashboard/account' },
-    { label: 'Add Account', path: '/dashboard/add-account' },
-    { label: 'Add Category', path: '/dashboard/add-category' },
-    { label: 'Map Category', path: '/dashboard/map-category' },
-    { label: 'Update Expenses', path: '/dashboard/update-expenses' },
-    { label: 'Logout', path: '/logout' },
+    { label: 'Dashboard', path: '/dashboard/home', icon: <FaHome /> },
+    { label: 'Add Account', path: '/dashboard/add-account', icon: <FaUserPlus /> },
+    { label: 'Add Category', path: '/dashboard/add-category', icon: <FaFolderPlus /> },
+    { label: 'Map Category', path: '/dashboard/map-category', icon: <FaMapSigns /> },
+    { label: 'Update Expenses', path: '/dashboard/update-expenses', icon: <FaEdit /> },
+    { label: 'Summary', path: '/dashboard/summary', icon: <FaChartPie /> },
+    { label: 'Logout', path: '/logout', icon: <FaSignOutAlt /> },
   ];
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen bg-moody-dark text-white">
       {/* Top Bar */}
-      <header className="bg-moody text-white flex items-center justify-between px-6 py-4 shadow-neumorph">
+      <header className="flex items-center justify-between px-6 py-4 bg-moody-dark shadow-neumorph">
         {/* Sidebar Toggle */}
         <button
           onClick={toggleSidebar}
           className="mr-4 focus:outline-none"
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {/* Simple hamburger / arrow icon using unicode characters. */}
-          <span className="text-2xl font-bold">
-            {isCollapsed ? '☰' : '✕'}
-          </span>
+          {isCollapsed ? <FaBars size={20} /> : <FaTimes size={20} />}
         </button>
-        <div className="text-2xl font-bold flex-1">Expense Tracker</div>
-        <Link
-          to="/dashboard/summary"
-          className="text-sm bg-white text-moody font-semibold px-4 py-2 rounded shadow-neumorph hover:bg-moody-light hover:text-white transition"
-        >
-          View Summary
-        </Link>
+        {/* Title */}
+        <div className="text-2xl font-bold flex-1">Dashboard</div>
+        {/* User Icon */}
+        <div className="ml-auto flex items-center space-x-4">
+          {/* Replace with actual profile picture if available */}
+          <div className="bg-moody p-2 rounded-lg shadow-neumorph">
+            {user?.profilePic ? (
+              <img
+                src={user.profilePic}
+                alt="User"
+                className="w-8 h-8 rounded-full"
+              />
+            ) : (
+              <FaUserCircle size={24} className="text-white" />
+            )}
+          </div>
+        </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-      {/* Sidebar */}
+        {/* Sidebar */}
         <aside
-          className={`bg-white shadow-neumorph p-4 overflow-y-auto transition-all duration-300 ${
-            isCollapsed ? 'w-20' : 'w-64'
-          }`}
+          className={`transition-all duration-300 flex-shrink-0 ${
+            isCollapsed ? 'w-20' : 'w-60'
+          } bg-moody shadow-neumorph p-4`}
         >
-          {/* User Info */}
-          <div className="flex flex-col items-center mb-6">
-            <img
-              src={
-                user?.profilePic ||
-                'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
-              }
-              alt="User"
-              className={`rounded-full mb-2 ${isCollapsed ? 'w-12 h-12' : 'w-20 h-20'}`}
-            />
-            {!isCollapsed && (
-              <div className="text-center">
-                <h2 className="text-lg font-semibold text-moody-dark">{user?.firstName}</h2>
-                <p className="text-gray-500">{user?.lastName}</p>
-              </div>
-            )}
-          </div>
-
           {/* Navigation Links */}
           <nav>
             <ul className="space-y-2">
-              {navItems.map(({ label, path }) => {
+              {navItems.map(({ label, path, icon }) => {
                 const isActive = location.pathname === path;
                 return (
                   <li key={path}>
@@ -82,14 +92,16 @@ export default function DashboardLayout({ user }) {
                       className={
                         `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 ` +
                         (isActive
-                          ? 'bg-moody text-white'
-                          : 'bg-transparent text-moody-dark hover:bg-moody-light hover:text-white')
+                          ? 'bg-moody-dark text-white'
+                          : 'bg-transparent text-white hover:bg-moody-light')
                       }
                     >
-                      {/* Icon/Initial or full label based on collapsed state */}
-                      <span className="text-lg font-semibold">
-                        {isCollapsed ? label.charAt(0) : label}
-                      </span>
+                      {/* Icon */}
+                      <span className="text-lg">{icon}</span>
+                      {/* Label (hidden when collapsed) */}
+                      {!isCollapsed && (
+                        <span className="font-medium">{label}</span>
+                      )}
                     </Link>
                   </li>
                 );

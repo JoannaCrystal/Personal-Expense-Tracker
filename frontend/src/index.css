@@ -8,7 +8,15 @@
 /* Global styles */
 body {
   margin: 0;
-  @apply font-sans bg-smoky text-gray-800;
+  /*
+    Apply the custom font and a dark gradient background to the entire
+    application. The gradient flows from the darkest shade through the
+    default purple to the light shade defined in tailwind.config.js.
+    We also set the base text colour to white since the dark background
+    provides sufficient contrast. If you wish to change the typography
+    colour later, adjust the text classes on individual components.
+  */
+  @apply font-sans text-white bg-moody-gradient; /* use our custom gradient */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -17,4 +25,17 @@ body {
 code {
   font-family: 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* 💜 Purple text color in all form fields */
+input,
+textarea,
+select {
+  color: #2a2154; /* Deep moody purple */
+}
+
+/* Optional: soften placeholder text to match purple palette */
+::placeholder {
+  color: #6b5a93; /* Lighter purple for readability */
+  opacity: 1;
 }
