@@ -82,17 +82,17 @@ export default function UpdateExpenses() {
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Update Expenses</h2>
+    <div className="p-6">
+      <h2 className="text-2xl font-semibold text-moody-dark mb-4">Update Expenses</h2>
 
       {expenseForms.map((form, idx) => (
-        <div key={idx} className="mb-6 border p-4 rounded shadow-sm">
-          <label className="block mb-2 font-medium">
+        <div key={idx} className="mb-6 bg-white p-4 rounded-2xl shadow-neumorph">
+          <label className="block mb-3 font-medium text-gray-700">
             Select Account:
             <select
               value={form.accountId}
               onChange={(e) => handleAccountChange(idx, e.target.value)}
-              className="block mt-1 w-full border border-gray-300 rounded px-2 py-1"
+              className="block mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-moody-dark"
             >
               <option value="">-- Select Account --</option>
               {accounts.map((account) => (
@@ -103,7 +103,7 @@ export default function UpdateExpenses() {
             </select>
           </label>
 
-          <label className="block mb-2 font-medium">
+          <label className="block mb-2 font-medium text-gray-700">
             Upload Expense Excel Sheet:
             <input
               type="file"
@@ -118,7 +118,7 @@ export default function UpdateExpenses() {
       <button
         type="button"
         onClick={addExpenseForm}
-        className="mb-4 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+        className="mb-4 px-4 py-2 bg-moody text-white rounded shadow-neumorph hover:bg-moody-dark"
       >
         + Add another expense upload
       </button>
@@ -127,7 +127,7 @@ export default function UpdateExpenses() {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          className="px-5 py-2 bg-moody text-white rounded shadow-neumorph hover:bg-moody-dark disabled:opacity-50"
         >
           {loading ? 'Uploading...' : 'Upload Expenses'}
         </button>

@@ -100,13 +100,17 @@ export default function MapCategory() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Map Substrings to Categories</h2>
+      <h2 className="text-2xl font-semibold text-moody-dark mb-4">Map Substrings to Categories</h2>
 
+      {/* Existing Mappings Section */}
       {Object.keys(groupedMappings).length > 0 ? (
-        <div className="mb-6 space-y-2">
+        <div className="mb-6 space-y-3">
           {Object.entries(groupedMappings).map(([catName, substrs]) => (
-            <div key={catName} className="p-3 bg-gray-100 rounded shadow-sm">
-              <strong>{catName}:</strong> {substrs.join(', ')}
+            <div
+              key={catName}
+              className="p-4 bg-white rounded-2xl shadow-neumorph text-gray-800"
+            >
+              <strong className="text-moody-dark mr-1">{catName}:</strong> {substrs.join(', ')}
             </div>
           ))}
         </div>
@@ -114,11 +118,12 @@ export default function MapCategory() {
         <p className="text-gray-600 mb-6">No mappings found.</p>
       )}
 
+      {/* Mapping Form */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
         <select
           value={selectedCategoryId}
           onChange={(e) => setSelectedCategoryId(e.target.value)}
-          className="border px-4 py-2 rounded w-full sm:w-1/3"
+          className="border border-gray-300 rounded px-4 py-2 w-full sm:w-1/3 focus:outline-none focus:ring-2 focus:ring-moody-dark"
         >
           <option value="">-- Select Category --</option>
           {categories.map((cat) => (
@@ -131,18 +136,27 @@ export default function MapCategory() {
           value={substrings}
           onChange={(e) => setSubstrings(e.target.value)}
           placeholder="e.g. Walmart, Costco"
-          className="border px-4 py-2 rounded w-full sm:flex-1"
+          className="border border-gray-300 rounded px-4 py-2 w-full sm:flex-1 focus:outline-none focus:ring-2 focus:ring-moody-dark"
         />
 
         <button
           onClick={handleAddMapping}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="bg-moody text-white px-4 py-2 rounded shadow-neumorph hover:bg-moody-dark disabled:opacity-50"
         >
           Add Mapping
         </button>
       </div>
 
-      {message && <p className="mt-2 text-sm">{message}</p>}
+      {message && (
+        <p
+          className={`mt-2 text-sm ${
+            message.startsWith('✅') ? 'text-green-600' :
+            message.startsWith('⚠️') ? 'text-yellow-600' : 'text-red-600'
+          }`}
+        >
+          {message}
+        </p>
+      )}
     </div>
   );
 }

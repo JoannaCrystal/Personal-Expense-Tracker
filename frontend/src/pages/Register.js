@@ -75,8 +75,8 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-16 p-8 bg-white rounded-lg shadow-md font-sans">
-      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Create an Account</h2>
+    <div className="max-w-md mx-auto mt-16 p-8 bg-white rounded-2xl shadow-neumorph">
+      <h2 className="text-3xl font-semibold text-center text-moody mb-6">Create an Account</h2>
 
       <form onSubmit={handleRegister} className="space-y-5">
         {/* First Name */}
@@ -93,7 +93,7 @@ const Register = () => {
             className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
               errors.first_name
                 ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-blue-500'
+                : 'border-gray-300 focus:ring-moody-dark'
             }`}
             placeholder="Your first name"
           />
@@ -114,7 +114,7 @@ const Register = () => {
             className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
               errors.last_name
                 ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-blue-500'
+                : 'border-gray-300 focus:ring-moody-dark'
             }`}
             placeholder="Your last name"
           />
@@ -135,7 +135,7 @@ const Register = () => {
             className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
               errors.username
                 ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-blue-500'
+                : 'border-gray-300 focus:ring-moody-dark'
             }`}
             placeholder="Choose a unique username"
           />
@@ -156,7 +156,7 @@ const Register = () => {
             className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
               errors.email
                 ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-blue-500'
+                : 'border-gray-300 focus:ring-moody-dark'
             }`}
             placeholder="you@example.com"
           />
@@ -177,7 +177,7 @@ const Register = () => {
             className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
               errors.password
                 ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-blue-500'
+                : 'border-gray-300 focus:ring-moody-dark'
             }`}
             placeholder="Create a password"
           />
@@ -198,7 +198,7 @@ const Register = () => {
             className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
               errors.confirm_password
                 ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-blue-500'
+                : 'border-gray-300 focus:ring-moody-dark'
             }`}
             placeholder="Confirm your password"
           />
@@ -209,7 +209,7 @@ const Register = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition"
+          className="w-full bg-moody text-white font-semibold py-3 rounded-md shadow-neumorph hover:bg-moody-dark transition"
         >
           Register
         </button>

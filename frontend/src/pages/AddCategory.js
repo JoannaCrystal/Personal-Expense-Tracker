@@ -55,36 +55,45 @@ const AddCategory = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Your Categories</h2>
+      <h2 className="text-2xl font-semibold text-moody-dark mb-4">Your Categories</h2>
 
       {categories.length ? (
-        <ul className="space-y-2 mb-6">
+        <ul className="space-y-3 mb-6">
           {categories.map((cat) => (
-            <li key={cat.id} className="p-3 bg-gray-100 rounded shadow">
+            <li
+              key={cat.id}
+              className="p-4 bg-white rounded-2xl shadow-neumorph text-gray-800"
+            >
               {cat.name}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mb-6 text-gray-600">No categories found.</p>
+        <p className="mb-6 text-gray-500">No categories found.</p>
       )}
 
-      <div className="flex items-center space-x-4">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
         <input
           value={newCategory}
           onChange={(e) => setNewCategory(e.target.value)}
           placeholder="New Category Name"
-          className="border px-4 py-2 rounded w-64"
+          className="border border-gray-300 rounded px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-moody-dark"
         />
         <button
           onClick={handleAddCategory}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className="bg-moody text-white px-4 py-2 rounded shadow-neumorph hover:bg-moody-dark"
         >
           Add Category
         </button>
       </div>
 
-      {message && <p className="mt-4 text-sm text-gray-700">{message}</p>}
+      {message && (
+        <p
+          className={`mt-4 text-sm ${message.startsWith('✅') ? 'text-green-600' : 'text-red-600'}`}
+        >
+          {message}
+        </p>
+      )}
     </div>
   );
 };
