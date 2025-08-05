@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PublicCardLayout from '../layouts/PublicCardLayout';
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -11,6 +12,9 @@ const Register = () => {
   });
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState({});
+
+  const textColor = '#2a2154';
+  const hoverColor = '#42327d';
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -37,7 +41,6 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage('');
-
     if (!validate()) return;
 
     try {
@@ -75,141 +78,46 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-16 p-8 bg-white rounded-2xl shadow-neumorph">
-      <h2 className="text-3xl font-semibold text-center text-moody mb-6">Create an Account</h2>
-
+    <PublicCardLayout>
+      <h2 className="text-3xl font-semibold text-center mb-6">Create an Account</h2>
       <form onSubmit={handleRegister} className="space-y-5">
-        {/* First Name */}
-        <div>
-          <label htmlFor="first_name" className="block text-gray-700 font-medium mb-1">
-            First Name
-          </label>
-          <input
-            id="first_name"
-            name="first_name"
-            type="text"
-            value={form.first_name}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
-              errors.first_name
-                ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-moody-dark'
-            }`}
-            placeholder="Your first name"
-          />
-          {errors.first_name && <p className="mt-1 text-red-600 text-sm">{errors.first_name}</p>}
-        </div>
-
-        {/* Last Name */}
-        <div>
-          <label htmlFor="last_name" className="block text-gray-700 font-medium mb-1">
-            Last Name
-          </label>
-          <input
-            id="last_name"
-            name="last_name"
-            type="text"
-            value={form.last_name}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
-              errors.last_name
-                ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-moody-dark'
-            }`}
-            placeholder="Your last name"
-          />
-          {errors.last_name && <p className="mt-1 text-red-600 text-sm">{errors.last_name}</p>}
-        </div>
-
-        {/* Username */}
-        <div>
-          <label htmlFor="username" className="block text-gray-700 font-medium mb-1">
-            Username
-          </label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            value={form.username}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
-              errors.username
-                ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-moody-dark'
-            }`}
-            placeholder="Choose a unique username"
-          />
-          {errors.username && <p className="mt-1 text-red-600 text-sm">{errors.username}</p>}
-        </div>
-
-        {/* Email */}
-        <div>
-          <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
-              errors.email
-                ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-moody-dark'
-            }`}
-            placeholder="you@example.com"
-          />
-          {errors.email && <p className="mt-1 text-red-600 text-sm">{errors.email}</p>}
-        </div>
-
-        {/* Password */}
-        <div>
-          <label htmlFor="password" className="block text-gray-700 font-medium mb-1">
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
-              errors.password
-                ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-moody-dark'
-            }`}
-            placeholder="Create a password"
-          />
-          {errors.password && <p className="mt-1 text-red-600 text-sm">{errors.password}</p>}
-        </div>
-
-        {/* Confirm Password */}
-        <div>
-          <label htmlFor="confirm_password" className="block text-gray-700 font-medium mb-1">
-            Confirm Password
-          </label>
-          <input
-            id="confirm_password"
-            name="confirm_password"
-            type="password"
-            value={form.confirm_password}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition ${
-              errors.confirm_password
-                ? 'border-red-500 focus:ring-red-400'
-                : 'border-gray-300 focus:ring-moody-dark'
-            }`}
-            placeholder="Confirm your password"
-          />
-          {errors.confirm_password && (
-            <p className="mt-1 text-red-600 text-sm">{errors.confirm_password}</p>
-          )}
-        </div>
+        {[
+          { name: 'first_name', label: 'First Name', type: 'text' },
+          { name: 'last_name', label: 'Last Name', type: 'text' },
+          { name: 'username', label: 'Username', type: 'text' },
+          { name: 'email', label: 'Email', type: 'email' },
+          { name: 'password', label: 'Password', type: 'password' },
+          { name: 'confirm_password', label: 'Confirm Password', type: 'password' },
+        ].map(({ name, label, type }) => (
+          <div key={name}>
+            <label htmlFor={name} className="block font-medium mb-1">
+              {label}
+            </label>
+            <input
+              id={name}
+              name={name}
+              type={type}
+              value={form[name]}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition"
+              style={{
+                color: textColor,
+                backgroundColor: '#b49db6',
+                border: `1px solid ${textColor}`,
+              }}
+              placeholder={`Enter your ${label.toLowerCase()}`}
+              required
+            />
+            {errors[name] && <p className="mt-1 text-red-600 text-sm">{errors[name]}</p>}
+          </div>
+        ))}
 
         <button
           type="submit"
-          className="w-full bg-moody text-white font-semibold py-3 rounded-md shadow-neumorph hover:bg-moody-dark transition"
+          className="w-full font-semibold py-3 rounded-md text-white transition"
+          style={{ backgroundColor: textColor }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = hoverColor)}
+          onMouseOut={(e) => (e.target.style.backgroundColor = textColor)}
         >
           Register
         </button>
@@ -226,7 +134,7 @@ const Register = () => {
           {message}
         </p>
       )}
-    </div>
+    </PublicCardLayout>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PublicCardLayout from '../layouts/PublicCardLayout';
 
 const Login = () => {
   const [identifier, setIdentifier] = useState('');
@@ -7,10 +8,12 @@ const Login = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
+  const textColor = '#2a2154';
+  const hoverColor = '#42327d';
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage('');
-
     if (!identifier.trim() || !password) {
       setMessage('⚠️ Please enter username/email and password');
       return;
@@ -25,20 +28,8 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-
-        // Save JWT token separately
         localStorage.setItem('token', data.access_token);
-
-        // Save user info separately
         localStorage.setItem('user', JSON.stringify(data.user));
-
-        setMessage(`✅ Welcome back, ${data.user.first_name}!`);
-
-        // Clear inputs
-        setIdentifier('');
-        setPassword('');
-
-        // Redirect to dashboard home
         navigate('/dashboard/home');
       } else {
         const err = await response.json();
@@ -50,12 +41,11 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-16 p-8 bg-white rounded-2xl shadow-neumorph">
-      <h2 className="text-3xl font-semibold text-center text-moody mb-6">Login</h2>
-
+    <PublicCardLayout>
+      <h2 className="text-3xl font-semibold text-center mb-6">Login</h2>
       <form onSubmit={handleLogin} className="space-y-6">
         <div>
-          <label htmlFor="identifier" className="block text-gray-700 font-medium mb-2">
+          <label className="block font-medium mb-2" htmlFor="identifier">
             Username or Email
           </label>
           <input
@@ -63,14 +53,19 @@ const Login = () => {
             type="text"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-moody-dark focus:border-moody-dark transition"
+            className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition"
+            style={{
+              color: textColor,
+              backgroundColor: '#b49db6',
+              border: `1px solid ${textColor}`,
+            }}
             placeholder="Enter your username or email"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
+          <label className="block font-medium mb-2" htmlFor="password">
             Password
           </label>
           <input
@@ -78,7 +73,12 @@ const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-moody-dark focus:border-moody-dark transition"
+            className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition"
+            style={{
+              color: textColor,
+              backgroundColor: '#b49db6',
+              border: `1px solid ${textColor}`,
+            }}
             placeholder="Enter your password"
             required
           />
@@ -86,7 +86,10 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full bg-moody text-white font-semibold py-3 rounded-md shadow-neumorph hover:bg-moody-dark transition"
+          className="w-full font-semibold py-3 rounded-md text-white transition"
+          style={{ backgroundColor: textColor }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = hoverColor)}
+          onMouseOut={(e) => (e.target.style.backgroundColor = textColor)}
         >
           Login
         </button>
@@ -103,7 +106,7 @@ const Login = () => {
           {message}
         </p>
       )}
-    </div>
+    </PublicCardLayout>
   );
 };
 

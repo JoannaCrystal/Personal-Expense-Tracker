@@ -39,7 +39,6 @@ export default function Summary() {
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
 
-  // Fetch available categories
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -54,7 +53,6 @@ export default function Summary() {
     if (token) fetchCategories();
   }, [token]);
 
-  // Fetch report summaries
   const fetchReports = useCallback(
     async (filters = {}) => {
       setLoading(true);
@@ -87,7 +85,6 @@ export default function Summary() {
     if (token) fetchReports();
   }, [token, fetchReports]);
 
-  // Apply filters to fetch reports
   const applyFilters = () => {
     const f = {};
     if (startDate) f.start_date = startDate;
@@ -96,7 +93,11 @@ export default function Summary() {
     fetchReports(f);
   };
 
-  // Chart data definitions
+  // Dark purple colour palette (matches the button colour)
+  const chartPrimary = '#2a2154';
+  const chartSecondary = '#42327d';
+
+  // Chart data using dark purple shades
   const pieChartData = useMemo(
     () => ({
       labels: ['Income', 'Expense'],
@@ -104,7 +105,7 @@ export default function Summary() {
         {
           label: 'Total',
           data: [Math.abs(pieData.total_income), pieData.total_expense],
-          backgroundColor: ['#8C6BB8', '#4C316C'],
+          backgroundColor: [chartPrimary, chartSecondary],
         },
       ],
     }),
@@ -118,7 +119,7 @@ export default function Summary() {
         {
           label: 'Expense ($)',
           data: barData.map((item) => parseFloat(item.total)),
-          backgroundColor: '#6B4C9A',
+          backgroundColor: chartPrimary,
         },
       ],
     }),
@@ -138,14 +139,14 @@ export default function Summary() {
           label: 'Income ($)',
           data: lineData.map((item) => parseFloat(item.total_income)),
           fill: false,
-          borderColor: '#8C6BB8',
+          borderColor: chartPrimary,
           tension: 0.3,
         },
         {
           label: 'Expense ($)',
           data: lineData.map((item) => parseFloat(item.total_expense)),
           fill: false,
-          borderColor: '#4C316C',
+          borderColor: chartSecondary,
           tension: 0.3,
         },
       ],
@@ -160,34 +161,52 @@ export default function Summary() {
         {
           label: 'Total Expense ($)',
           data: topCategories.map((item) => parseFloat(item.total)),
-          backgroundColor: '#8C6BB8',
+          backgroundColor: chartPrimary,
         },
       ],
     }),
     [topCategories]
   );
 
-  // Shared chart options for consistent sizing
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'bottom',
-      },
+      legend: { position: 'bottom' },
     },
   };
 
+  // Page and card styling remains pastel (from previous step)
+  const pastelBackground = {
+    background: '#b49db6',
+  };
+
+  const cardStyle = {
+    background: '#b49db6',
+    borderRadius: '1.25rem',
+    border: '1px solid rgba(255, 255, 255, 0.25)',
+    boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.05), -4px -4px 8px rgba(255, 255, 255, 0.4)',
+    padding: '1.5rem',
+  };
+
+  const filterCardStyle = {
+    ...cardStyle,
+    padding: '1rem',
+  };
+
   return (
-    <div className="p-6">
+    <div style={pastelBackground} className="p-6">
       <h2 className="text-2xl font-semibold text-moody-dark mb-4">
         Expense Summary & Reports
       </h2>
 
-      {/* Filter controls */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <div>
-          <label className="block">Start Date</label>
+      {/* Filter tile with dark button */}
+      <div
+        style={filterCardStyle}
+        className="flex flex-wrap items-end justify-center gap-4 mx-auto mb-8 w-full md:w-3/4 lg:w-2/3"
+      >
+        <div className="flex flex-col">
+          <label className="block text-sm mb-1">Start Date</label>
           <input
             type="date"
             value={startDate}
@@ -195,8 +214,8 @@ export default function Summary() {
             className="border p-2 rounded"
           />
         </div>
-        <div>
-          <label className="block">End Date</label>
+        <div className="flex flex-col">
+          <label className="block text-sm mb-1">End Date</label>
           <input
             type="date"
             value={endDate}
@@ -204,8 +223,8 @@ export default function Summary() {
             className="border p-2 rounded"
           />
         </div>
-        <div>
-          <label className="block">Category</label>
+        <div className="flex flex-col">
+          <label className="block text-sm mb-1">Category</label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -221,34 +240,36 @@ export default function Summary() {
         </div>
         <button
           onClick={applyFilters}
-          className="bg-moody text-white px-4 py-2 rounded"
+          className="text-white px-6 py-2 rounded"
+          style={{ backgroundColor: chartPrimary, height: '38px' }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = chartSecondary)}
+          onMouseOut={(e) => (e.target.style.backgroundColor = chartPrimary)}
         >
-          Apply Filters
+          Apply
         </button>
       </div>
 
-      {/* Display charts or data messages */}
       {loading ? (
         <p>Loading reports…</p>
       ) : error ? (
         <p className="text-red-600">{error}</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Total Income (Pie Chart) */}
-          <div className="bg-white/90 backdrop-blur rounded-2xl p-6 shadow-neumorph flex flex-col">
-            <h3 className="text-lg font-semibold text-moody mb-4">
-              Total Income
-            </h3>
+          <div style={cardStyle} className="flex flex-col">
+            <h3 className="text-lg font-semibold text-moody mb-4">Total Income</h3>
             <div className="relative flex-grow">
-              <Pie data={pieChartData} options={{ ...chartOptions, plugins: { legend: { position: 'right' } }} } />
+              <Pie
+                data={pieChartData}
+                options={{
+                  ...chartOptions,
+                  plugins: { legend: { position: 'right' } },
+                }}
+              />
             </div>
           </div>
 
-          {/* Expenses by Category (Bar Chart) */}
-          <div className="bg-white/90 backdrop-blur rounded-2xl p-6 shadow-neumorph flex flex-col">
-            <h3 className="text-lg font-semibold text-moody mb-4">
-              Expenses by Category
-            </h3>
+          <div style={cardStyle} className="flex flex-col">
+            <h3 className="text-lg font-semibold text-moody mb-4">Expenses by Category</h3>
             <div className="relative flex-grow">
               {barData.length ? (
                 <Bar data={barChartData} options={chartOptions} />
@@ -258,11 +279,8 @@ export default function Summary() {
             </div>
           </div>
 
-          {/* Income & Expenses (Line Chart) */}
-          <div className="bg-white/90 backdrop-blur rounded-2xl p-6 shadow-neumorph flex flex-col">
-            <h3 className="text-lg font-semibold text-moody mb-4">
-              Income &amp; Expenses
-            </h3>
+          <div style={cardStyle} className="flex flex-col">
+            <h3 className="text-lg font-semibold text-moody mb-4">Income &amp; Expenses</h3>
             <div className="relative flex-grow">
               {lineData.length ? (
                 <Line data={lineChartData} options={chartOptions} />
@@ -272,14 +290,14 @@ export default function Summary() {
             </div>
           </div>
 
-          {/* Top Categories (Horizontal Bar Chart) */}
-          <div className="bg-white/90 backdrop-blur rounded-2xl p-6 shadow-neumorph flex flex-col">
-            <h3 className="text-lg font-semibold text-moody mb-4">
-              Top Categories
-            </h3>
+          <div style={cardStyle} className="flex flex-col">
+            <h3 className="text-lg font-semibold text-moody mb-4">Top Categories</h3>
             <div className="relative flex-grow">
               {topCategories.length ? (
-                <Bar data={topBarData} options={{ ...chartOptions, indexAxis: 'y' }} />
+                <Bar
+                  data={topBarData}
+                  options={{ ...chartOptions, indexAxis: 'y' }}
+                />
               ) : (
                 <p>No top categories data</p>
               )}

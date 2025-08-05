@@ -36,31 +36,5 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # Redis – required by Redash
-  redis:
-    image: redis:alpine
-    container_name: redis
-    ports:
-      - "6379:6379"
-
-  # Redash server (with worker included)
-  redash:
-    image: redash/redash:latest
-    platform: linux/amd64
-    container_name: redash
-    ports:
-      - "5050:5000"           # Redash UI
-    environment:
-      # Connection string for Redash's metadata database. It is recommended to use
-      # a separate DB (e.g. redash) in the same Postgres server.
-      REDASH_DATABASE_URL: "postgresql://expenseuser:expensepass@db:5432/redash"
-      # Location of Redis for job queues
-      REDASH_REDIS_URL: "redis://redis:6379/0"
-      # Secret key for session cookies and other cryptographic features
-      REDASH_COOKIE_SECRET: "a-super-secret-string"
-    depends_on:
-      - db
-      - redis
-
 volumes:
   postgres_data:

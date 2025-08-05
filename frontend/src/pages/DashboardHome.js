@@ -2,18 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaChartPie } from 'react-icons/fa';
 
-/**
- * DashboardHome renders the landing page within the dashboard section. It
- * displays a grid of action cards that link to different parts of the
- * application. The layout follows the neumorphic dark theme illustrated
- * in the provided mock‑up: a deep purple background, soft shadows and
- * rounded corners. When additional cards are added, the grid simply
- * wraps to another row.
- */
 export default function DashboardHome() {
-  // Define the cards to show on the dashboard. Each card can optionally
-  // specify a route via the `to` property. If no route is defined, the
-  // card will render as a static box (used for the welcome message).
   const cards = [
     {
       label: 'Welcome!',
@@ -23,7 +12,7 @@ export default function DashboardHome() {
     {
       label: 'Summary',
       to: '/dashboard/summary',
-      icon: <FaChartPie size={32} className="opacity-70 mb-3" />,
+      icon: <FaChartPie size={32} style={{ color: '#2a2154', opacity: 0.7, marginBottom: '0.75rem' }} />,
     },
     {
       label: 'Add Account',
@@ -43,22 +32,41 @@ export default function DashboardHome() {
     },
   ];
 
+  // Embossed tile styling matching the summary page
+  const cardStyle = {
+    backgroundColor: '#b49db6',
+    borderRadius: '1.25rem',
+    border: '1px solid rgba(255, 255, 255, 0.25)',
+    boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.05), -4px -4px 8px rgba(255, 255, 255, 0.4)',
+    padding: '1.5rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    minHeight: '160px', // optional: consistent height for tiles
+  };
+
   return (
-    <div className="p-8 bg-moody-dark min-h-screen text-white">
+    <div className="p-8 min-h-screen" style={{ color: '#2a2154', backgroundColor: '#b49db6' }}>
       <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {cards.map((card, idx) => {
           const content = (
-            <div className="p-6 rounded-xl bg-moody shadow-neumorph transition-colors hover:bg-moody-light h-full flex flex-col justify-center">
+            <div style={cardStyle}>
               {card.icon}
-              <h2 className="text-2xl font-semibold mb-1">{card.label}</h2>
+              <h2 style={{ color: '#2a2154' }} className="text-2xl font-semibold mb-1">
+                {card.label}
+              </h2>
               {card.subtext && (
-                <p className="text-sm text-gray-300 mt-1">{card.subtext}</p>
+                <p style={{ color: '#2a2154' }} className="text-sm mt-1">
+                  {card.subtext}
+                </p>
               )}
             </div>
           );
           return card.to ? (
-            <Link to={card.to} key={idx}>{content}</Link>
+            <Link to={card.to} key={idx}>
+              {content}
+            </Link>
           ) : (
             <div key={idx}>{content}</div>
           );

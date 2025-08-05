@@ -1,5 +1,3 @@
-// frontend/src/pages/UpdateExpenses.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -10,16 +8,13 @@ export default function UpdateExpenses() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Retrieve JWT token from localStorage
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     async function fetchAccounts() {
       try {
         const response = await axios.get('http://localhost:8000/api/accounts', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setAccounts(response.data);
       } catch (err) {
@@ -30,26 +25,22 @@ export default function UpdateExpenses() {
     fetchAccounts();
   }, [token]);
 
-  // Add another file/account upload row
   const addExpenseForm = () => {
     setExpenseForms([...expenseForms, { accountId: '', file: null }]);
   };
 
-  // Handle account selection changes
   const handleAccountChange = (index, value) => {
     const updatedForms = [...expenseForms];
     updatedForms[index].accountId = value;
     setExpenseForms(updatedForms);
   };
 
-  // Handle file selection changes
   const handleFileChange = (index, file) => {
     const updatedForms = [...expenseForms];
     updatedForms[index].file = file;
     setExpenseForms(updatedForms);
   };
 
-  // Submit each form row to the backend
   const handleSubmit = async () => {
     setLoading(true);
     setError('');
@@ -72,7 +63,6 @@ export default function UpdateExpenses() {
         });
       }
       setSuccessMessage('Expenses uploaded successfully.');
-      // Reset the form rows after successful upload
       setExpenseForms([{ accountId: '', file: null }]);
     } catch (err) {
       setError(err.response?.data?.detail || err.message || 'Upload failed');
@@ -81,18 +71,38 @@ export default function UpdateExpenses() {
     }
   };
 
+  const bgColor = '#b49db6';
+  const textColor = '#2a2154';
+  const hoverColor = '#42327d';
+
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold text-moody-dark mb-4">Update Expenses</h2>
+    <div className="p-6" style={{ backgroundColor: bgColor, color: textColor }}>
+      <h2 className="text-2xl font-semibold mb-6">Update Expenses</h2>
 
       {expenseForms.map((form, idx) => (
-        <div key={idx} className="mb-6 bg-white p-4 rounded-2xl shadow-neumorph">
-          <label className="block mb-3 font-medium text-gray-700">
+        <div
+          key={idx}
+          className="mb-6 inline-block"
+          style={{
+            backgroundColor: bgColor,
+            borderRadius: '1.25rem',
+            padding: '1.25rem',
+            boxShadow: '6px 6px 12px rgba(0,0,0,0.05), -6px -6px 12px rgba(255,255,255,0.4)',
+            maxWidth: '100%',
+            minWidth: '280px',
+          }}
+        >
+          <label className="block mb-3 font-medium" style={{ color: textColor }}>
             Select Account:
             <select
               value={form.accountId}
               onChange={(e) => handleAccountChange(idx, e.target.value)}
-              className="block mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-moody-dark"
+              className="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 transition"
+              style={{
+                backgroundColor: '#fff',
+                color: textColor,
+                border: `1px solid ${textColor}`,
+              }}
             >
               <option value="">-- Select Account --</option>
               {accounts.map((account) => (
@@ -103,31 +113,48 @@ export default function UpdateExpenses() {
             </select>
           </label>
 
-          <label className="block mb-2 font-medium text-gray-700">
+          <label className="block font-medium" style={{ color: textColor }}>
             Upload Expense Excel Sheet:
             <input
               type="file"
               accept=".xlsx,.xls"
               onChange={(e) => handleFileChange(idx, e.target.files[0])}
-              className="block mt-1"
+              className="block mt-2"
+              style={{ color: textColor }}
             />
           </label>
         </div>
       ))}
 
-      <button
-        type="button"
-        onClick={addExpenseForm}
-        className="mb-4 px-4 py-2 bg-moody text-white rounded shadow-neumorph hover:bg-moody-dark"
-      >
-        + Add another expense upload
-      </button>
+      <div className="flex flex-wrap items-center gap-4 mb-6">
+        <button
+          type="button"
+          onClick={addExpenseForm}
+          className="font-semibold rounded text-white transition"
+          style={{
+            backgroundColor: textColor,
+            padding: '0.5rem 1rem',
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = hoverColor)}
+          onMouseOut={(e) => (e.target.style.backgroundColor = textColor)}
+        >
+          + Add another expense upload
+        </button>
 
-      <div>
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="px-5 py-2 bg-moody text-white rounded shadow-neumorph hover:bg-moody-dark disabled:opacity-50"
+          className="font-semibold rounded text-white transition disabled:opacity-50"
+          style={{
+            backgroundColor: textColor,
+            padding: '0.5rem 1.25rem',
+          }}
+          onMouseOver={(e) => {
+            if (!loading) e.target.style.backgroundColor = hoverColor;
+          }}
+          onMouseOut={(e) => {
+            if (!loading) e.target.style.backgroundColor = textColor;
+          }}
         >
           {loading ? 'Uploading...' : 'Upload Expenses'}
         </button>

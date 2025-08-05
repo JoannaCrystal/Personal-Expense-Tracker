@@ -96,38 +96,58 @@ export default function MapCategory() {
     return grouped;
   }, [mappings]);
 
-  if (loading) return <p className="p-6 text-gray-600">Loading category mappings...</p>;
+  // UI colors
+  const bgColor = '#b49db6';
+  const textColor = '#2a2154';
+  const hoverColor = '#42327d';
+
+  if (loading) return <p className="p-6" style={{ color: textColor }}>Loading category mappings...</p>;
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold text-moody-dark mb-4">Map Substrings to Categories</h2>
+    <div className="p-6" style={{ backgroundColor: bgColor, color: textColor }}>
+      <h2 className="text-2xl font-semibold mb-4">Map Substrings to Categories</h2>
 
-      {/* Existing Mappings Section */}
+      {/* Mapping Tiles */}
       {Object.keys(groupedMappings).length > 0 ? (
-        <div className="mb-6 space-y-3">
+        <div className="mb-6 space-y-4">
           {Object.entries(groupedMappings).map(([catName, substrs]) => (
             <div
               key={catName}
-              className="p-4 bg-white rounded-2xl shadow-neumorph text-gray-800"
+              style={{
+                backgroundColor: bgColor,
+                borderRadius: '1rem',
+                boxShadow: '6px 6px 12px rgba(0,0,0,0.06), -6px -6px 12px rgba(255,255,255,0.4)',
+                padding: '1rem',
+                color: textColor,
+              }}
             >
-              <strong className="text-moody-dark mr-1">{catName}:</strong> {substrs.join(', ')}
+              <strong className="mr-1">{catName}:</strong> {substrs.join(', ')}
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-gray-600 mb-6">No mappings found.</p>
+        <p className="mb-6">No mappings found.</p>
       )}
 
       {/* Mapping Form */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+      <div className="flex flex-wrap gap-4 items-end mb-4">
         <select
           value={selectedCategoryId}
           onChange={(e) => setSelectedCategoryId(e.target.value)}
-          className="border border-gray-300 rounded px-4 py-2 w-full sm:w-1/3 focus:outline-none focus:ring-2 focus:ring-moody-dark"
+          style={{
+            backgroundColor: '#fff',
+            color: textColor,
+            border: `1px solid ${textColor}`,
+            borderRadius: '0.5rem',
+            padding: '0.5rem 1rem',
+          }}
+          className="focus:outline-none focus:ring-2 transition"
         >
           <option value="">-- Select Category --</option>
           {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>{cat.name}</option>
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
           ))}
         </select>
 
@@ -136,23 +156,43 @@ export default function MapCategory() {
           value={substrings}
           onChange={(e) => setSubstrings(e.target.value)}
           placeholder="e.g. Walmart, Costco"
-          className="border border-gray-300 rounded px-4 py-2 w-full sm:flex-1 focus:outline-none focus:ring-2 focus:ring-moody-dark"
+          style={{
+            backgroundColor: '#fff',
+            color: textColor,
+            border: `1px solid ${textColor}`,
+            borderRadius: '0.5rem',
+            padding: '0.5rem 1rem',
+            flex: '1 1 300px',
+          }}
+          className="focus:outline-none focus:ring-2 transition"
         />
 
         <button
           onClick={handleAddMapping}
-          className="bg-moody text-white px-4 py-2 rounded shadow-neumorph hover:bg-moody-dark disabled:opacity-50"
+          disabled={!selectedCategoryId || !substrings.trim()}
+          className="font-semibold text-white rounded-md transition"
+          style={{
+            backgroundColor: textColor,
+            padding: '0.5rem 1rem',
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = hoverColor)}
+          onMouseOut={(e) => (e.target.style.backgroundColor = textColor)}
         >
           Add Mapping
         </button>
       </div>
 
+      {/* Message */}
       {message && (
         <p
-          className={`mt-2 text-sm ${
-            message.startsWith('✅') ? 'text-green-600' :
-            message.startsWith('⚠️') ? 'text-yellow-600' : 'text-red-600'
-          }`}
+          className="mt-2 text-sm"
+          style={{
+            color: message.startsWith('✅')
+              ? '#1f7a1f'
+              : message.startsWith('⚠️')
+              ? '#9b7517'
+              : '#c53030',
+          }}
         >
           {message}
         </p>

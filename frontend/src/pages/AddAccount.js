@@ -5,7 +5,7 @@ const AddAccount = () => {
   const [newAccount, setNewAccount] = useState('');
   const [message, setMessage] = useState('');
 
-  const token = localStorage.getItem('token'); // ⬅️ get JWT token from localStorage
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     if (!token) {
@@ -14,9 +14,7 @@ const AddAccount = () => {
     }
 
     fetch('http://localhost:8000/api/accounts', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         if (!res.ok) throw new Error('Unauthorized');
@@ -28,17 +26,15 @@ const AddAccount = () => {
 
   const handleAddAccount = async () => {
     if (!newAccount.trim()) return;
-
     try {
       const response = await fetch('http://localhost:8000/api/accounts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // ⬅️ send token here too
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ name: newAccount }),
       });
-
       if (response.ok) {
         const added = await response.json();
         setAccounts([...accounts, added]);
@@ -53,43 +49,71 @@ const AddAccount = () => {
     }
   };
 
+  // Colours
+  const bgColor = '#b49db6';
+  const textColor = '#2a2154';
+  const hoverColor = '#42327d';
+
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold text-moody-dark mb-4">Your Accounts</h2>
+    <div className="p-6" style={{ backgroundColor: bgColor, color: textColor }}>
+      <h2 className="text-2xl font-semibold mb-4">Your Accounts</h2>
 
       {accounts.length ? (
-        <ul className="space-y-3 mb-6">
+        <div className="flex flex-wrap items-center gap-4 mb-6">
           {accounts.map((acc) => (
-            <li
+            <div
               key={acc.id}
-              className="p-4 bg-white rounded-2xl shadow-neumorph text-gray-800"
+              style={{
+                backgroundColor: bgColor,
+                borderRadius: '1rem',
+                boxShadow: '6px 6px 12px rgba(0,0,0,0.06), -6px -6px 12px rgba(255,255,255,0.4)',
+                padding: '0.75rem 1rem',
+                color: textColor,
+              }}
             >
               {acc.name}
-            </li>
+            </div>
           ))}
-        </ul>
-      ) : (
-        <p className="mb-6 text-gray-500">No accounts found.</p>
-      )}
 
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        <input
-          value={newAccount}
-          onChange={(e) => setNewAccount(e.target.value)}
-          placeholder="New Account Name"
-          className="border border-gray-300 rounded px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-moody-dark"
-        />
-        <button
-          onClick={handleAddAccount}
-          className="bg-moody text-white px-4 py-2 rounded shadow-neumorph hover:bg-moody-dark"
-        >
-          Add Account
-        </button>
-      </div>
+          {/* Input + Button */}
+          <div className="flex items-center gap-4">
+            <input
+              value={newAccount}
+              onChange={(e) => setNewAccount(e.target.value)}
+              placeholder="New Account Name"
+              className="focus:outline-none focus:ring-2 transition"
+              style={{
+                backgroundColor: '#ffffff',
+                color: textColor,
+                border: `1px solid ${textColor}`,
+                borderRadius: '0.5rem',
+                padding: '0.5rem 1rem',
+              }}
+            />
+            <button
+              onClick={handleAddAccount}
+              className="font-semibold rounded-md text-white transition"
+              style={{
+                backgroundColor: textColor,
+                padding: '0.5rem 1rem',
+              }}
+              onMouseOver={(e) => (e.target.style.backgroundColor = hoverColor)}
+              onMouseOut={(e) => (e.target.style.backgroundColor = textColor)}
+            >
+              Add Account
+            </button>
+          </div>
+        </div>
+      ) : (
+        <p className="mb-6">No accounts found.</p>
+      )}
 
       {message && (
         <p
-          className={`mt-4 text-sm ${message.startsWith('✅') ? 'text-green-600' : 'text-red-600'}`}
+          className="mt-4 text-sm"
+          style={{
+            color: message.startsWith('✅') ? '#1f7a1f' : '#c53030',
+          }}
         >
           {message}
         </p>

@@ -13,25 +13,12 @@ import {
   FaUserCircle,
 } from 'react-icons/fa';
 
-/**
- * DashboardLayout is responsible for rendering the persistent shell around
- * authenticated pages. It includes a collapsible sidebar and a top bar with a
- * menu toggle and user icon. The sidebar lists navigation items with icons,
- * mirroring the design shown in the provided mock-up image. Active routes
- * are highlighted, and the sidebar collapses down to show only icons when
- * toggled.
- */
 export default function DashboardLayout({ user }) {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
-  /**
-   * Define navigation items for the sidebar. Each item includes a label,
-   * destination path, and an icon component. The order here will dictate
-   * the order they appear in the sidebar.
-   */
   const navItems = [
     { label: 'Dashboard', path: '/dashboard/home', icon: <FaHome /> },
     { label: 'Add Account', path: '/dashboard/add-account', icon: <FaUserPlus /> },
@@ -42,24 +29,27 @@ export default function DashboardLayout({ user }) {
     { label: 'Logout', path: '/logout', icon: <FaSignOutAlt /> },
   ];
 
+  const baseBg = '#b49db6';
+  const textColor = '#2a2154';
+  const hoverBg = '#d2bfd9';
+
   return (
-    <div className="flex flex-col h-screen bg-moody-dark text-white">
+    <div className="flex flex-col h-screen" style={{ backgroundColor: baseBg, color: textColor }}>
       {/* Top Bar */}
-      <header className="flex items-center justify-between px-6 py-4 bg-moody-dark shadow-neumorph">
-        {/* Sidebar Toggle */}
+      <header
+        className="flex items-center justify-between px-6 py-4 shadow-neumorph"
+        style={{ backgroundColor: baseBg }}
+      >
         <button
           onClick={toggleSidebar}
           className="mr-4 focus:outline-none"
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {isCollapsed ? <FaBars size={20} /> : <FaTimes size={20} />}
+          {isCollapsed ? <FaBars size={20} color={textColor} /> : <FaTimes size={20} color={textColor} />}
         </button>
-        {/* Title */}
-        <div className="text-2xl font-bold flex-1">Dashboard</div>
-        {/* User Icon */}
+        <div className="text-2xl font-bold flex-1" style={{ color: textColor }}>Dashboard</div>
         <div className="ml-auto flex items-center space-x-4">
-          {/* Replace with actual profile picture if available */}
-          <div className="bg-moody p-2 rounded-lg shadow-neumorph">
+          <div className="p-2 rounded-lg shadow-neumorph" style={{ backgroundColor: baseBg }}>
             {user?.profilePic ? (
               <img
                 src={user.profilePic}
@@ -67,7 +57,7 @@ export default function DashboardLayout({ user }) {
                 className="w-8 h-8 rounded-full"
               />
             ) : (
-              <FaUserCircle size={24} className="text-white" />
+              <FaUserCircle size={24} color={textColor} />
             )}
           </div>
         </div>
@@ -78,9 +68,9 @@ export default function DashboardLayout({ user }) {
         <aside
           className={`transition-all duration-300 flex-shrink-0 ${
             isCollapsed ? 'w-20' : 'w-60'
-          } bg-moody shadow-neumorph p-4`}
+          } shadow-neumorph p-4`}
+          style={{ backgroundColor: baseBg }}
         >
-          {/* Navigation Links */}
           <nav>
             <ul className="space-y-2">
               {navItems.map(({ label, path, icon }) => {
@@ -89,16 +79,13 @@ export default function DashboardLayout({ user }) {
                   <li key={path}>
                     <Link
                       to={path}
-                      className={
-                        `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 ` +
-                        (isActive
-                          ? 'bg-moody-dark text-white'
-                          : 'bg-transparent text-white hover:bg-moody-light')
-                      }
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200"
+                      style={{
+                        backgroundColor: isActive ? hoverBg : 'transparent',
+                        color: textColor,
+                      }}
                     >
-                      {/* Icon */}
                       <span className="text-lg">{icon}</span>
-                      {/* Label (hidden when collapsed) */}
                       {!isCollapsed && (
                         <span className="font-medium">{label}</span>
                       )}
