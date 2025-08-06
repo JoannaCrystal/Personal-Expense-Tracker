@@ -15,21 +15,21 @@ const AddAccount = () => {
       return;
     }
 
-    fetch('${API_BASE_URL}/api/accounts', {
+    fetch(`${API_BASE_URL}/api/accounts`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         if (!res.ok) throw new Error('Unauthorized');
         return res.json();
       })
-      .then((data) => setAccounts(data))
+      .then((data) => setAccounts(Array.isArray(data) ? data : []))
       .catch(() => setMessage('⚠️ Failed to fetch accounts'));
   }, [token]);
 
   const handleAddAccount = async () => {
     if (!newAccount.trim()) return;
     try {
-      const response = await fetch('${API_BASE_URL}/api/accounts', {
+      const response = await fetch(`${API_BASE_URL}/api/accounts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,6 +37,7 @@ const AddAccount = () => {
         },
         body: JSON.stringify({ name: newAccount }),
       });
+
       if (response.ok) {
         const added = await response.json();
         setAccounts([...accounts, added]);
@@ -60,55 +61,57 @@ const AddAccount = () => {
     <div className="p-6" style={{ backgroundColor: bgColor, color: textColor }}>
       <h2 className="text-2xl font-semibold mb-4">Your Accounts</h2>
 
-      {accounts.length ? (
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-          {accounts.map((acc) => (
+      {/* Accounts list or message */}
+      <div className="flex flex-wrap items-center gap-4 mb-6">
+        {accounts.length > 0 ? (
+          accounts.map((acc) => (
             <div
               key={acc.id}
               style={{
                 backgroundColor: bgColor,
                 borderRadius: '1rem',
-                boxShadow: '6px 6px 12px rgba(0,0,0,0.06), -6px -6px 12px rgba(255,255,255,0.4)',
+                boxShadow:
+                  '6px 6px 12px rgba(0,0,0,0.06), -6px -6px 12px rgba(255,255,255,0.4)',
                 padding: '0.75rem 1rem',
                 color: textColor,
               }}
             >
               {acc.name}
             </div>
-          ))}
+          ))
+        ) : (
+          <p>No accounts found.</p>
+        )}
+      </div>
 
-          {/* Input + Button */}
-          <div className="flex items-center gap-4">
-            <input
-              value={newAccount}
-              onChange={(e) => setNewAccount(e.target.value)}
-              placeholder="New Account Name"
-              className="focus:outline-none focus:ring-2 transition"
-              style={{
-                backgroundColor: '#ffffff',
-                color: textColor,
-                border: `1px solid ${textColor}`,
-                borderRadius: '0.5rem',
-                padding: '0.5rem 1rem',
-              }}
-            />
-            <button
-              onClick={handleAddAccount}
-              className="font-semibold rounded-md text-white transition"
-              style={{
-                backgroundColor: textColor,
-                padding: '0.5rem 1rem',
-              }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = hoverColor)}
-              onMouseOut={(e) => (e.target.style.backgroundColor = textColor)}
-            >
-              Add Account
-            </button>
-          </div>
-        </div>
-      ) : (
-        <p className="mb-6">No accounts found.</p>
-      )}
+      {/* Input + Button always visible */}
+      <div className="flex items-center gap-4 mb-4">
+        <input
+          value={newAccount}
+          onChange={(e) => setNewAccount(e.target.value)}
+          placeholder="New Account Name"
+          className="focus:outline-none focus:ring-2 transition"
+          style={{
+            backgroundColor: '#ffffff',
+            color: textColor,
+            border: `1px solid ${textColor}`,
+            borderRadius: '0.5rem',
+            padding: '0.5rem 1rem',
+          }}
+        />
+        <button
+          onClick={handleAddAccount}
+          className="font-semibold rounded-md text-white transition"
+          style={{
+            backgroundColor: textColor,
+            padding: '0.5rem 1rem',
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = hoverColor)}
+          onMouseOut={(e) => (e.target.style.backgroundColor = textColor)}
+        >
+          Add Account
+        </button>
+      </div>
 
       {message && (
         <p
