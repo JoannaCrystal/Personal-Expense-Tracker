@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 const AddAccount = () => {
   const [accounts, setAccounts] = useState([]);
   const [newAccount, setNewAccount] = useState('');
@@ -13,7 +15,7 @@ const AddAccount = () => {
       return;
     }
 
-    fetch('http://localhost:8000/api/accounts', {
+    fetch('${API_BASE_URL}/api/accounts', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -27,7 +29,7 @@ const AddAccount = () => {
   const handleAddAccount = async () => {
     if (!newAccount.trim()) return;
     try {
-      const response = await fetch('http://localhost:8000/api/accounts', {
+      const response = await fetch('${API_BASE_URL}/api/accounts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

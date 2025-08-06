@@ -11,6 +11,7 @@ import Summary from './pages/Summary';
 import MapCategory from './pages/MapCategory';
 import DashboardHome from './pages/DashboardHome';
 import PublicLayout from './layouts/PublicLayout';
+import Logout from './pages/Logout';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<AuthPage />} />
           <Route path="/register" element={<AuthPage />} />
+          <Route path="/logout" element={<Logout />} />
         </Route>
 
         {/* Protected Routes - Dashboard */}
@@ -33,6 +35,7 @@ function App() {
           <Route path="update-expenses" element={<UpdateExpenses />} />
           <Route path="summary" element={<Summary />} />
         </Route>
+
       </Routes>
     </Router>
   );

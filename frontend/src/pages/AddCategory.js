@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const AddCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -13,7 +14,7 @@ const AddCategory = () => {
       return;
     }
 
-    fetch('http://localhost:8000/api/categories', {
+    fetch(`${API_BASE_URL}/api/categories`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
