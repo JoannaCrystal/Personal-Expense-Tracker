@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublicCardLayout from '../layouts/PublicCardLayout';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 const Login = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +22,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/login', {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ identifier, password }),

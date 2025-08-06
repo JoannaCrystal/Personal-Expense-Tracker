@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PublicCardLayout from '../layouts/PublicCardLayout';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 const Register = () => {
   const [form, setForm] = useState({
     first_name: '',
@@ -44,7 +46,7 @@ const Register = () => {
     if (!validate()) return;
 
     try {
-      const response = await fetch('http://localhost:8000/api/register', {
+      const response = await fetch(`${API_BASE_URL}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
