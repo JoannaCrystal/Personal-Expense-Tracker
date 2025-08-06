@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 export default function UpdateExpenses() {
   const [accounts, setAccounts] = useState([]);
   const [expenseForms, setExpenseForms] = useState([{ accountId: '', file: null }]);
@@ -13,7 +15,7 @@ export default function UpdateExpenses() {
   useEffect(() => {
     async function fetchAccounts() {
       try {
-        const response = await axios.get('http://localhost:8000/api/accounts', {
+        const response = await axios.get(`${API_BASE_URL}/api/accounts`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAccounts(response.data);
@@ -55,7 +57,7 @@ export default function UpdateExpenses() {
         formData.append('account_id', form.accountId);
         formData.append('file', form.file);
 
-        await axios.post('http://localhost:8000/api/expenses/upload', formData, {
+        await axios.post(`${API_BASE_URL}/api/expenses/upload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,

@@ -29,7 +29,7 @@ const AddCategory = () => {
     if (!newCategory.trim()) return;
 
     try {
-      const response = await fetch('http://localhost:8000/api/categories', {
+      const response = await fetch(`${API_BASE_URL}/api/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

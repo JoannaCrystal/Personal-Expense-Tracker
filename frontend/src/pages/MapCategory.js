@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 export default function MapCategory() {
   const [categories, setCategories] = useState([]);
   const [mappings, setMappings] = useState([]);
@@ -15,10 +17,10 @@ export default function MapCategory() {
     const fetchData = async () => {
       try {
         const [catRes, mapRes] = await Promise.all([
-          fetch('http://localhost:8000/api/categories', {
+          fetch(`${API_BASE_URL}/api/categories`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch('http://localhost:8000/api/mappings', {
+          fetch(`${API_BASE_URL}/api/mappings`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -46,7 +48,7 @@ export default function MapCategory() {
     }
 
     try {
-      const res = await fetch('http://localhost:8000/api/mappings', {
+      const res = await fetch(`${API_BASE_URL}/api/mappings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +75,7 @@ export default function MapCategory() {
       setSelectedCategoryId('');
       setSubstrings('');
 
-      const updatedRes = await fetch('http://localhost:8000/api/mappings', {
+      const updatedRes = await fetch(`${API_BASE_URL}/api/mappings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const updatedData = await updatedRes.json();

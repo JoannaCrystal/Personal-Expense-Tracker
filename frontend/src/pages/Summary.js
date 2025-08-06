@@ -14,6 +14,8 @@ import {
 } from 'chart.js';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -42,7 +44,7 @@ export default function Summary() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await axios.get('http://localhost:8000/api/categories', {
+        const res = await axios.get(`${API_BASE_URL}/api/categories`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCategories(Array.isArray(res.data) ? res.data : []);
@@ -64,7 +66,7 @@ export default function Summary() {
         if (filters.category_id) params.append('category_id', filters.category_id);
 
         const { data } = await axios.get(
-          `http://localhost:8000/api/summary/reports?${params}`,
+          `${API_BASE_URL}/api/summary/reports?${params}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -93,11 +95,9 @@ export default function Summary() {
     fetchReports(f);
   };
 
-  // Dark purple colour palette (matches the button colour)
   const chartPrimary = '#2a2154';
   const chartSecondary = '#42327d';
 
-  // Chart data using dark purple shades
   const pieChartData = useMemo(
     () => ({
       labels: ['Income', 'Expense'],
@@ -176,7 +176,6 @@ export default function Summary() {
     },
   };
 
-  // Page and card styling remains pastel (from previous step)
   const pastelBackground = {
     background: '#b49db6',
   };
@@ -200,7 +199,6 @@ export default function Summary() {
         Expense Summary & Reports
       </h2>
 
-      {/* Filter tile with dark button */}
       <div
         style={filterCardStyle}
         className="flex flex-wrap items-end justify-center gap-4 mx-auto mb-8 w-full md:w-3/4 lg:w-2/3"
