@@ -7,6 +7,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://54.204.110.167:3000",
+    "http://mybudgettracker.ddns.net:3000"
 ]
 
 app.add_middleware(
